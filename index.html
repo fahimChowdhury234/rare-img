@@ -237,6 +237,12 @@
             .sm-filter {
                display: block !important;
             }
+            .sort-options.sm {
+               display: block !important;
+            }
+            .sort-options.lg {
+               display: none !important;
+            }
          }
          .sm-filter {
             padding: 10px 15px;
@@ -281,12 +287,18 @@
             cursor: pointer;
             border-radius: 8px;
          }
+         .sort-options.sm {
+            display: none;
+         }
+         .sort-options.lg {
+            display: block;
+         }
       </style>
    </head>
    <body>
       <div class="popup">
          <div class="popup-items">
-            <select id="filterAlcohol" onchange="filterImages()">
+            <select id="filterAlcohol2" onchange="filterImages2()">
                <option value="">Alcohol</option>
                <option value="Yellow Brand Beer">Yellow Brand Beer</option>
                <option value="Whiskey Glass">Whiskey Glass</option>
@@ -300,7 +312,7 @@
             </select>
 
             <!-- Shirts Filter -->
-            <select id="filterShirts" onchange="filterImages()">
+            <select id="filterShirts2" onchange="filterImages2()">
                <option value="">Shirts</option>
                <option value="Black Stripped T-Shirt">Black Stripped T-Shirt</option>
                <option value="Black T-Shirt">Black T-Shirt</option>
@@ -311,7 +323,7 @@
             </select>
 
             <!-- Eye Wear Filter -->
-            <select id="filterEyeWear" onchange="filterImages()">
+            <select id="filterEyeWear2" onchange="filterImages2()">
                <option value="">Eye Wear</option>
                <option value="Round Rose Glasses">Round Rose Glasses</option>
                <option value="Black Glasses">Black Glasses</option>
@@ -322,7 +334,7 @@
             </select>
 
             <!-- Hats Filter -->
-            <select id="filterHats" onchange="filterImages()">
+            <select id="filterHats2" onchange="filterImages2()">
                <option value="">Hats</option>
                <option value="Blue Flat Brim">Blue Flat Brim</option>
                <option value="Blue Baseball Cap">Blue Baseball Cap</option>
@@ -333,7 +345,7 @@
             </select>
 
             <!-- Mouth Filter -->
-            <select id="filterMouth" onchange="filterImages()">
+            <select id="filterMouth2" onchange="filterImages2()">
                <option value="">Mouth</option>
                <option value="Cuban Cigar">Cuban Cigar</option>
                <option value="Pipe">Pipe</option>
@@ -359,8 +371,15 @@
                </button>
             </div>
 
-            <div class="sort-options">
+            <div class="sort-options lg">
                <select id="sortRarity" onchange="filterImages()">
+                  <option value="">Sort by Rarity</option>
+                  <option value="lowToHigh">Rarity Low to High</option>
+                  <option value="highToLow">Rarity High to Low</option>
+               </select>
+            </div>
+            <div class="sort-options sm">
+               <select id="sortRarity2" onchange="filterImages2()">
                   <option value="">Sort by Rarity</option>
                   <option value="lowToHigh">Rarity Low to High</option>
                   <option value="highToLow">Rarity High to Low</option>
@@ -638,7 +657,6 @@
             var filterMouth = document.getElementById("filterMouth").value;
             var sortRarity = document.getElementById("sortRarity").value;
             toggleSortRarity(true);
-
             // Filter data based on the selected options
             var filteredData = jsonData.filter(function (item) {
                return (
@@ -649,6 +667,85 @@
                   (filterMouth === "" || item.mouth === filterMouth)
                );
             });
+            console.log(filteredData);
+
+            var noDataMessage = document.getElementById("no-data-message");
+            noDataMessage.style.display = filteredData.length === 0 ? "block" : "none";
+            if (sortRarity === "lowToHigh") {
+               filteredData.sort(function (a, b) {
+                  return a.percentage - b.percentage;
+               });
+            } else if (sortRarity === "highToLow") {
+               filteredData.sort(function (a, b) {
+                  return b.percentage - a.percentage;
+               });
+            }
+            // Reset currentChunk and load the filtered data
+            currentChunk = 0;
+            var container = document.getElementById("data-container");
+            container.innerHTML = ""; // Clear existing data
+
+            // Determine the number of items to display initially
+            var itemsToShow = Math.min(chunkSize, filteredData.length);
+
+            for (var i = 0; i < itemsToShow; i++) {
+               var item = filteredData[i];
+
+               var imgBox = document.createElement("div");
+               imgBox.className = "img-box loading";
+               var contentDiv = document.createElement("div"); // Wrap img, h2, and p inside a div
+               contentDiv.className = "content";
+               var imgElement = document.createElement("img");
+               imgElement.src = `./images/${item.id}.png`; // Directly set the src without lazy loading
+               imgElement.alt = ""; // Add alt attribute for accessibility
+
+               var idElement = document.createElement("h2");
+               idElement.textContent = "NUMBER: " + item.id;
+
+               var rarityElement = document.createElement("p");
+               rarityElement.textContent = "Rarity: " + item.rarity;
+
+               var percentageElement = document.createElement("p");
+               percentageElement.textContent = "Percentile: " + item.percentage + "%";
+
+               imgBox.appendChild(imgElement);
+               contentDiv.appendChild(idElement);
+               contentDiv.appendChild(rarityElement);
+               contentDiv.appendChild(percentageElement);
+
+               imgBox.appendChild(contentDiv);
+
+               container.appendChild(imgBox);
+               imgElement.addEventListener("load", function () {
+                  this.parentElement.classList.remove("loading");
+               });
+            }
+
+            // Determine whether to show or hide the "Load More" button
+            var loadMoreBtn = document.getElementById("load-more-btn");
+            loadMoreBtn.style.display = filteredData.length > chunkSize ? "block" : "none";
+            loadMoreBtn.disabled = filteredData.length <= chunkSize; // Disable the button if there are fewer or equal to 50 filtered items
+         }
+         function filterImages2() {
+            var filterAlcohol = document.getElementById("filterAlcohol2").value;
+            var filterShirts = document.getElementById("filterShirts2").value;
+            var filterEyeWear = document.getElementById("filterEyeWear2").value;
+            var filterHats = document.getElementById("filterHats2").value;
+            var filterMouth = document.getElementById("filterMouth2").value;
+            var sortRarity = document.getElementById("sortRarity2").value;
+            toggleSortRarity(true);
+            // Filter data based on the selected options
+            var filteredData = jsonData.filter(function (item) {
+               return (
+                  (filterAlcohol === "" || item.alcohol === filterAlcohol) &&
+                  (filterShirts === "" || item.shirt === filterShirts) &&
+                  (filterEyeWear === "" || item.eyewear === filterEyeWear) &&
+                  (filterHats === "" || item.hat === filterHats) &&
+                  (filterMouth === "" || item.mouth === filterMouth)
+               );
+            });
+            console.log(filteredData);
+
             var noDataMessage = document.getElementById("no-data-message");
             noDataMessage.style.display = filteredData.length === 0 ? "block" : "none";
             if (sortRarity === "lowToHigh") {
