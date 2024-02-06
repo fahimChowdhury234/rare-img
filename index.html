@@ -102,20 +102,12 @@
 
             width: 100%;
             min-height: 430px;
-            background-image: url(./animation.gif);
+            background-image: url(./images/animation.gif);
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
          }
 
-         .placeholder {
-            width: 100%;
-            min-height: 430px;
-            background-image: url(./animation.gif);
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-         }
          .search-filter-wrapper {
             display: flex;
             justify-content: space-between;
@@ -702,6 +694,10 @@
 
             document.getElementById("load-more-btn").style.display = "none";
             searchInput.value = "";
+            // Hide the "no data found" message if filtered data is found
+            if (filteredData.length > 0) {
+               noDataMessage.style.display = "none";
+            }
          }
 
          function handleKeyPress(event) {
@@ -779,13 +775,16 @@
          }
 
          function displayFilteredData(filteredData, sortRarity) {
+            console.log(filteredData.length);
+
             var container = document.getElementById("data-container");
             container.innerHTML = ""; // Clear existing data
-
+            var noDataMessage = document.getElementById("no-data-message");
             if (filteredData.length === 0) {
-               var noDataMessage = document.getElementById("no-data-message");
                noDataMessage.style.display = "block";
                return; // No need to proceed further if there's no data to display
+            } else {
+               noDataMessage.style.display = "none"; // Hide the "no data found" message if there is data to display
             }
 
             // Sort the filtered data based on sortRarity
@@ -812,6 +811,7 @@
             // Determine whether to show or hide the "Load More" button
             var loadMoreBtn = document.getElementById("load-more-btn");
             loadMoreBtn.style.display = filteredData.length > chunkSize ? "block" : "none";
+            // Hide the "no data found" message if filtered data is found
          }
 
          function createImageBox(item) {
