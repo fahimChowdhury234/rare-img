@@ -33,6 +33,7 @@
             min-height: 400px;
             cursor: pointer;
          }
+
          .img-box:hover img {
             transform: scale(1.05);
          }
@@ -243,6 +244,20 @@
             .sort-options.lg {
                display: none !important;
             }
+            .image-container {
+               gap: 10px;
+            }
+            .img-box {
+               min-height: 280px !important;
+               width: 47%;
+            }
+            .img-box img {
+               min-height: 200px !important;
+               max-height: 200px !important;
+            }
+            .img-box h2 {
+               font-size: 18px;
+            }
          }
          .sm-filter {
             padding: 10px 15px;
@@ -267,6 +282,7 @@
             flex-direction: column;
             gap: 30px;
             padding: 30px;
+            position: relative;
          }
          .popup-items select {
             color: #fff;
@@ -293,11 +309,41 @@
          .sort-options.lg {
             display: block;
          }
+         .search-bar .search {
+            display: flex;
+            align-items: center;
+            color: #111;
+            width: 80%;
+            padding: 0 20px;
+         }
+         .popup-cross {
+            position: absolute;
+            right: 16px;
+            width: fit-content !important;
+            top: 27px;
+            background-color: transparent !important;
+            padding: 5px 16px !important;
+            border: none !important;
+            color: #fff !important;
+            display: flex;
+            /* border-radius: 50px !important; */
+         }
+         .popup-items h3 {
+            font-size: 22px;
+            color: #fff;
+            margin: 0;
+         }
       </style>
    </head>
    <body>
       <div class="popup">
          <div class="popup-items">
+            <h3>Filter</h3>
+            <button class="popup-cross" onclick="hiddenPopup()">
+               <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="26" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"></path>
+               </svg>
+            </button>
             <select id="filterAlcohol2" onchange="filterImages2()">
                <option value="">Alcohol</option>
                <option value="Yellow Brand Beer">Yellow Brand Beer</option>
@@ -361,7 +407,12 @@
       <div class="container">
          <div class="search-filter-wrapper">
             <div class="search-bar">
-               <input type="text" id="searchInput" placeholder="Search by number..." onkeydown="handleKeyPress(event)" />
+               <div class="search">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                     <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                  </svg>
+                  <input type="text" id="searchInput" placeholder="Search by number..." onkeydown="handleKeyPress(event)" />
+               </div>
                <button onclick="searchImages()">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                      <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -564,7 +615,11 @@
             document.getElementById("filterEyeWear").value = "";
             document.getElementById("filterHats").value = "";
             document.getElementById("filterMouth").value = "";
+            document.getElementById("sortRarity").value = "";
+            document.getElementById("sortRarity2").value = "";
+
             toggleSortRarity(false);
+
             if (searchTerm === "") {
                // Show error message if search term is empty
                alert("Please enter a search term");
@@ -635,6 +690,7 @@
          // Additional function to handle clearing the search field
          function clearSearch() {
             let searchItem = document.querySelector(".search-item");
+            document.getElementById("load-more-btn").style.display = "block";
 
             searchItem.style.display = "none";
             toggleSortRarity(true);
@@ -805,7 +861,31 @@
          }
          function toggleSortRarity(enable) {
             var sortRaritySelect = document.getElementById("sortRarity");
+            var filterAlcohol2 = document.getElementById("filterAlcohol2");
+            var filterShirts2 = document.getElementById("filterShirts2");
+            var filterEyeWear2 = document.getElementById("filterEyeWear2");
+            var filterHats2 = document.getElementById("filterHats2");
+            var filterMouth2 = document.getElementById("filterMouth2");
+
+            var filterAlcohol = document.getElementById("filterAlcohol");
+            var filterShirts = document.getElementById("filterShirts");
+            var filterEyeWear = document.getElementById("filterEyeWear");
+            var filterHats = document.getElementById("filterHats");
+            var filterMouth = document.getElementById("filterMouth");
+            var sortRarity2 = document.getElementById("sortRarity2");
+
+            filterAlcohol.disabled = !enable;
+            filterShirts.disabled = !enable;
+            filterEyeWear.disabled = !enable;
+            filterHats.disabled = !enable;
+            filterMouth.disabled = !enable;
+            filterAlcohol2.disabled = !enable;
+            filterShirts2.disabled = !enable;
+            filterEyeWear2.disabled = !enable;
+            filterHats2.disabled = !enable;
+            filterMouth2.disabled = !enable;
             sortRaritySelect.disabled = !enable;
+            sortRarity2.disabled = !enable;
          }
 
          function openPopup() {
