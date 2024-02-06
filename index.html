@@ -559,6 +559,7 @@
          }
 
          function loadMore() {
+            console.log("lode morrrrr");
             var container = document.getElementById("data-container");
             var endIdx = currentChunk + chunkSize;
 
@@ -712,7 +713,9 @@
             var filterHats = document.getElementById("filterHats").value;
             var filterMouth = document.getElementById("filterMouth").value;
             var sortRarity = document.getElementById("sortRarity").value;
+            console.log(filterAlcohol);
             toggleSortRarity(true);
+
             // Filter data based on the selected options
             var filteredData = jsonData.filter(function (item) {
                return (
@@ -723,64 +726,9 @@
                   (filterMouth === "" || item.mouth === filterMouth)
                );
             });
-            console.log(filteredData);
 
-            var noDataMessage = document.getElementById("no-data-message");
-            noDataMessage.style.display = filteredData.length === 0 ? "block" : "none";
-            if (sortRarity === "lowToHigh") {
-               filteredData.sort(function (a, b) {
-                  return a.percentage - b.percentage;
-               });
-            } else if (sortRarity === "highToLow") {
-               filteredData.sort(function (a, b) {
-                  return b.percentage - a.percentage;
-               });
-            }
-            // Reset currentChunk and load the filtered data
-            currentChunk = 0;
-            var container = document.getElementById("data-container");
-            container.innerHTML = ""; // Clear existing data
-
-            // Determine the number of items to display initially
-            var itemsToShow = Math.min(chunkSize, filteredData.length);
-
-            for (var i = 0; i < itemsToShow; i++) {
-               var item = filteredData[i];
-
-               var imgBox = document.createElement("div");
-               imgBox.className = "img-box loading";
-               var contentDiv = document.createElement("div"); // Wrap img, h2, and p inside a div
-               contentDiv.className = "content";
-               var imgElement = document.createElement("img");
-               imgElement.src = `./images/${item.id}.png`; // Directly set the src without lazy loading
-               imgElement.alt = ""; // Add alt attribute for accessibility
-
-               var idElement = document.createElement("h2");
-               idElement.textContent = "NUMBER: " + item.id;
-
-               var rarityElement = document.createElement("p");
-               rarityElement.textContent = "Rarity: " + item.rarity;
-
-               var percentageElement = document.createElement("p");
-               percentageElement.textContent = "Percentile: " + item.percentage + "%";
-
-               imgBox.appendChild(imgElement);
-               contentDiv.appendChild(idElement);
-               contentDiv.appendChild(rarityElement);
-               contentDiv.appendChild(percentageElement);
-
-               imgBox.appendChild(contentDiv);
-
-               container.appendChild(imgBox);
-               imgElement.addEventListener("load", function () {
-                  this.parentElement.classList.remove("loading");
-               });
-            }
-
-            // Determine whether to show or hide the "Load More" button
-            var loadMoreBtn = document.getElementById("load-more-btn");
-            loadMoreBtn.style.display = filteredData.length > chunkSize ? "block" : "none";
-            loadMoreBtn.disabled = filteredData.length <= chunkSize; // Disable the button if there are fewer or equal to 50 filtered items
+            // Display filtered data
+            displayFilteredData(filteredData, sortRarity);
          }
          function filterImages2() {
             var filterAlcohol = document.getElementById("filterAlcohol2").value;
@@ -789,7 +737,9 @@
             var filterHats = document.getElementById("filterHats2").value;
             var filterMouth = document.getElementById("filterMouth2").value;
             var sortRarity = document.getElementById("sortRarity2").value;
+            console.log(filterAlcohol);
             toggleSortRarity(true);
+
             // Filter data based on the selected options
             var filteredData = jsonData.filter(function (item) {
                return (
@@ -800,10 +750,22 @@
                   (filterMouth === "" || item.mouth === filterMouth)
                );
             });
-            console.log(filteredData);
 
-            var noDataMessage = document.getElementById("no-data-message");
-            noDataMessage.style.display = filteredData.length === 0 ? "block" : "none";
+            // Display filtered data
+            displayFilteredData(filteredData, sortRarity);
+         }
+
+         function displayFilteredData(filteredData, sortRarity) {
+            var container = document.getElementById("data-container");
+            container.innerHTML = ""; // Clear existing data
+
+            if (filteredData.length === 0) {
+               var noDataMessage = document.getElementById("no-data-message");
+               noDataMessage.style.display = "block";
+               return; // No need to proceed further if there's no data to display
+            }
+
+            // Sort the filtered data based on sortRarity
             if (sortRarity === "lowToHigh") {
                filteredData.sort(function (a, b) {
                   return a.percentage - b.percentage;
@@ -813,52 +775,56 @@
                   return b.percentage - a.percentage;
                });
             }
-            // Reset currentChunk and load the filtered data
-            currentChunk = 0;
-            var container = document.getElementById("data-container");
-            container.innerHTML = ""; // Clear existing data
 
             // Determine the number of items to display initially
+            var chunkSize = 50;
             var itemsToShow = Math.min(chunkSize, filteredData.length);
 
             for (var i = 0; i < itemsToShow; i++) {
                var item = filteredData[i];
-
-               var imgBox = document.createElement("div");
-               imgBox.className = "img-box loading";
-               var contentDiv = document.createElement("div"); // Wrap img, h2, and p inside a div
-               contentDiv.className = "content";
-               var imgElement = document.createElement("img");
-               imgElement.src = `./images/${item.id}.png`; // Directly set the src without lazy loading
-               imgElement.alt = ""; // Add alt attribute for accessibility
-
-               var idElement = document.createElement("h2");
-               idElement.textContent = "NUMBER: " + item.id;
-
-               var rarityElement = document.createElement("p");
-               rarityElement.textContent = "Rarity: " + item.rarity;
-
-               var percentageElement = document.createElement("p");
-               percentageElement.textContent = "Percentile: " + item.percentage + "%";
-
-               imgBox.appendChild(imgElement);
-               contentDiv.appendChild(idElement);
-               contentDiv.appendChild(rarityElement);
-               contentDiv.appendChild(percentageElement);
-
-               imgBox.appendChild(contentDiv);
-
+               var imgBox = createImageBox(item);
                container.appendChild(imgBox);
-               imgElement.addEventListener("load", function () {
-                  this.parentElement.classList.remove("loading");
-               });
             }
 
             // Determine whether to show or hide the "Load More" button
             var loadMoreBtn = document.getElementById("load-more-btn");
             loadMoreBtn.style.display = filteredData.length > chunkSize ? "block" : "none";
-            loadMoreBtn.disabled = filteredData.length <= chunkSize; // Disable the button if there are fewer or equal to 50 filtered items
          }
+
+         function createImageBox(item) {
+            var imgBox = document.createElement("div");
+            imgBox.className = "img-box loading";
+
+            var contentDiv = document.createElement("div"); // Wrap img, h2, and p inside a div
+            contentDiv.className = "content";
+
+            var imgElement = document.createElement("img");
+            imgElement.src = `./images/${item.id}.png`; // Directly set the src without lazy loading
+            imgElement.alt = ""; // Add alt attribute for accessibility
+
+            var idElement = document.createElement("h2");
+            idElement.textContent = "NUMBER: " + item.id;
+
+            var rarityElement = document.createElement("p");
+            rarityElement.textContent = "Rarity: " + item.rarity;
+
+            var percentageElement = document.createElement("p");
+            percentageElement.textContent = "Percentile: " + item.percentage + "%";
+
+            imgBox.appendChild(imgElement);
+            contentDiv.appendChild(idElement);
+            contentDiv.appendChild(rarityElement);
+            contentDiv.appendChild(percentageElement);
+
+            imgBox.appendChild(contentDiv);
+
+            imgElement.addEventListener("load", function () {
+               this.parentElement.classList.remove("loading");
+            });
+
+            return imgBox;
+         }
+
          function toggleSortRarity(enable) {
             var sortRaritySelect = document.getElementById("sortRarity");
             var filterAlcohol2 = document.getElementById("filterAlcohol2");
@@ -898,63 +864,6 @@
             popup.style.opacity = "0";
             popup.style.visibility = "hidden";
          }
-         //  function sortImages() {
-         //     var sortRarity = document.getElementById("sortRarity").value;
-
-         //     // Sort the data based on percentage
-         //     if (sortRarity === "lowToHigh") {
-         //        jsonData.sort(function (a, b) {
-         //           return a.percentage - b.percentage;
-         //        });
-         //     } else if (sortRarity === "highToLow") {
-         //        jsonData.sort(function (a, b) {
-         //           return b.percentage - a.percentage;
-         //        });
-         //     }
-
-         //     // Reset currentChunk and load the sorted data
-         //     currentChunk = 0;
-         //     var container = document.getElementById("data-container");
-         //     container.innerHTML = ""; // Clear existing data
-
-         //     // Load the sorted data
-         //     for (var i = 0; i < chunkSize && i < jsonData.length; i++) {
-         //        var item = jsonData[i];
-
-         //        var imgBox = document.createElement("div");
-         //        imgBox.className = "img-box loading";
-
-         //        var imgElement = document.createElement("img");
-         //        imgElement.src = `./images/${item.id}.png`; // Directly set the src without lazy loading
-         //        imgElement.alt = ""; // Add alt attribute for accessibility
-
-         //        var idElement = document.createElement("h2");
-         //        idElement.textContent = "ID: " + item.id;
-
-         //        var rarityElement = document.createElement("p");
-         //        rarityElement.textContent = "Rarity: " + item.rarity;
-
-         //        var percentageElement = document.createElement("p");
-         //        percentageElement.textContent = "Percentage: " + item.percentage + "%";
-
-         //        imgBox.appendChild(imgElement);
-         //        imgBox.appendChild(idElement);
-         //        imgBox.appendChild(rarityElement);
-         //        imgBox.appendChild(percentageElement);
-
-         //        container.appendChild(imgBox);
-         //        imgElement.addEventListener("load", function () {
-         //           this.parentElement.classList.remove("loading");
-         //        });
-         //     }
-
-         //     // Hide the "Load More" button if all sorted data has been loaded
-         //     if (currentChunk >= jsonData.length) {
-         //        document.getElementById("load-more-btn").style.display = "none";
-         //     } else {
-         //        document.getElementById("load-more-btn").style.display = "block";
-         //     }
-         //  }
 
          fetchData();
       </script>
