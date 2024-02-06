@@ -266,6 +266,7 @@
             }
             .sorting {
                width: 100%;
+               padding: 0 !important;
             }
          }
 
@@ -339,11 +340,13 @@
          }
          .sorting-filter {
             display: flex;
+            justify-content: space-between;
          }
          .sorting {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 0 15px;
          }
       </style>
    </head>
@@ -852,7 +855,6 @@
             var filterEyeWear2 = document.getElementById("filterEyeWear2");
             var filterHats2 = document.getElementById("filterHats2");
             var filterMouth2 = document.getElementById("filterMouth2");
-
             var filterAlcohol = document.getElementById("filterAlcohol");
             var filterShirts = document.getElementById("filterShirts");
             var filterEyeWear = document.getElementById("filterEyeWear");
@@ -860,8 +862,7 @@
             var filterMouth = document.getElementById("filterMouth");
             var sortRarity2 = document.getElementById("sortRarity2");
             var smFilter = document.querySelector(".sm-filter");
-            var displayStyle = enable ? "block" : "none"; // Set the display style based on the enable flag
-
+            var displayStyle = enable ? "block" : "none";
             var sorting = document.querySelector(".sorting");
 
             filterAlcohol.style.display = displayStyle;
