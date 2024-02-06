@@ -203,6 +203,12 @@
             justify-content: center;
             align-items: center;
          }
+         .sm-filter {
+            padding: 10px 15px;
+            border: 1px solid #ececec;
+            border-radius: 8px;
+            display: none;
+         }
          @media only screen and (max-width: 768px) and (min-width: 320px) {
             .container {
                width: 95% !important;
@@ -236,7 +242,7 @@
                display: none;
             }
             .sm-filter {
-               display: block !important;
+               display: block;
             }
             .sort-options.sm {
                display: block !important;
@@ -259,12 +265,7 @@
                font-size: 18px;
             }
          }
-         .sm-filter {
-            padding: 10px 15px;
-            border: 1px solid #ececec;
-            border-radius: 8px;
-            display: none;
-         }
+
          .popup {
             position: fixed;
             top: 0;
@@ -839,19 +840,22 @@
             var filterHats = document.getElementById("filterHats");
             var filterMouth = document.getElementById("filterMouth");
             var sortRarity2 = document.getElementById("sortRarity2");
+            var smFilter = document.querySelector(".sm-filter");
+            var displayStyle = enable ? "block" : "none"; // Set the display style based on the enable flag
 
-            filterAlcohol.disabled = !enable;
-            filterShirts.disabled = !enable;
-            filterEyeWear.disabled = !enable;
-            filterHats.disabled = !enable;
-            filterMouth.disabled = !enable;
-            filterAlcohol2.disabled = !enable;
-            filterShirts2.disabled = !enable;
-            filterEyeWear2.disabled = !enable;
-            filterHats2.disabled = !enable;
-            filterMouth2.disabled = !enable;
-            sortRaritySelect.disabled = !enable;
-            sortRarity2.disabled = !enable;
+            filterAlcohol.style.display = displayStyle;
+            filterShirts.style.display = displayStyle;
+            filterEyeWear.style.display = displayStyle;
+            filterHats.style.display = displayStyle;
+            filterMouth.style.display = displayStyle;
+            filterAlcohol2.style.display = displayStyle;
+            filterShirts2.style.display = displayStyle;
+            filterEyeWear2.style.display = displayStyle;
+            filterHats2.style.display = displayStyle;
+            filterMouth2.style.display = displayStyle;
+            sortRaritySelect.style.display = displayStyle;
+            sortRarity2.style.display = displayStyle;
+            smFilter.style.display = displayStyle;
          }
 
          function openPopup() {
