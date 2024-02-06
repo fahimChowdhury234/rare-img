@@ -260,6 +260,15 @@
                width: 100%;
                padding: 0 !important;
             }
+            .img-box-full {
+               width: 95% !important;
+               min-height: 320px !important;
+               margin: 0 auto !important;
+            }
+            .img-box-full img {
+               min-height: 250px !important;
+               max-height: 250px !important;
+            }
          }
 
          .popup {
@@ -661,7 +670,7 @@
                var item = filteredData[i];
 
                var imgBox = document.createElement("div");
-               imgBox.className = "img-box loading";
+               imgBox.className = "img-box img-box-full loading";
 
                var contentDiv = document.createElement("div"); // Wrap img, h2, and p inside a div
                contentDiv.className = "content";
