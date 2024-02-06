@@ -129,7 +129,7 @@
             overflow: hidden;
             border-radius: 8px;
             height: 48px;
-            width: 60%;
+            width: 100%;
             display: flex;
             align-items: center;
          }
@@ -207,7 +207,7 @@
             padding: 10px 15px;
             border: 1px solid #ececec;
             border-radius: 8px;
-            display: none;
+            display: none !important;
          }
          @media only screen and (max-width: 768px) and (min-width: 320px) {
             .container {
@@ -242,7 +242,7 @@
                display: none;
             }
             .sm-filter {
-               display: block;
+               display: block !important;
             }
             .sort-options.sm {
                display: block !important;
@@ -263,6 +263,9 @@
             }
             .img-box h2 {
                font-size: 18px;
+            }
+            .sorting {
+               width: 100%;
             }
          }
 
@@ -314,7 +317,7 @@
             display: flex;
             align-items: center;
             color: #111;
-            width: 80%;
+            width: 85%;
             padding: 0 20px;
          }
          .popup-cross {
@@ -333,6 +336,14 @@
             font-size: 22px;
             color: #fff;
             margin: 0;
+         }
+         .sorting-filter {
+            display: flex;
+         }
+         .sorting {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
          }
       </style>
    </head>
@@ -422,106 +433,109 @@
                   <span>Search</span>
                </button>
             </div>
-
-            <div class="sort-options lg">
-               <select id="sortRarity" onchange="filterImages()">
-                  <option value="">Sort by Rarity</option>
-                  <option value="lowToHigh">Rarity Low to High</option>
-                  <option value="highToLow">Rarity High to Low</option>
-               </select>
-            </div>
-            <div class="sort-options sm">
-               <select id="sortRarity2" onchange="filterImages2()">
-                  <option value="">Sort by Rarity</option>
-                  <option value="lowToHigh">Rarity Low to High</option>
-                  <option value="highToLow">Rarity High to Low</option>
-               </select>
-            </div>
-            <div class="sm-filter" onclick="openPopup()">
-               <svg width="20" viewBox="0 0 18 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                  <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
-                  <title>filter_list</title>
-                  <desc>Created with Sketch.</desc>
-                  <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                     <g id="Rounded" transform="translate(-443.000000, -1488.000000)">
-                        <g id="Content" transform="translate(100.000000, 1428.000000)">
-                           <g id="-Round-/-Content-/-filter_list" transform="translate(340.000000, 54.000000)">
-                              <g transform="translate(0.000000, 0.000000)">
-                                 <polygon id="Path" points="0 0 24 0 24 24 0 24"></polygon>
-                                 <path
-                                    d="M11,18 L13,18 C13.55,18 14,17.55 14,17 C14,16.45 13.55,16 13,16 L11,16 C10.45,16 10,16.45 10,17 C10,17.55 10.45,18 11,18 Z M3,7 C3,7.55 3.45,8 4,8 L20,8 C20.55,8 21,7.55 21,7 C21,6.45 20.55,6 20,6 L4,6 C3.45,6 3,6.45 3,7 Z M7,13 L17,13 C17.55,13 18,12.55 18,12 C18,11.45 17.55,11 17,11 L7,11 C6.45,11 6,11.45 6,12 C6,12.55 6.45,13 7,13 Z"
-                                    id="🔹Icon-Color"
-                                    fill="#1D1D1D"
-                                 ></path>
-                              </g>
-                           </g>
-                        </g>
-                     </g>
-                  </g>
-               </svg>
-            </div>
          </div>
       </div>
 
       <div class="container">
-         <div class="filter">
-            <!-- Alcohol In Hand Filter -->
-            <select id="filterAlcohol" onchange="filterImages()">
-               <option value="">Alcohol</option>
-               <option value="Yellow Brand Beer">Yellow Brand Beer</option>
-               <option value="Whiskey Glass">Whiskey Glass</option>
-               <option value="Green Beer Bottle">Green Beer Bottle</option>
-               <option value="White Logo Beer Bottle">White Logo Beer Bottle</option>
-               <option value="Overflowing Pint">Overflowing Pint</option>
-               <option value="Green Beer Can">Green Beer Can</option>
-               <option value=" Bourbon">Bourbon</option>
-               <option value="Vodka Bottle">Vodka Bottle</option>
-               <option value="Wine Glass">Wine Glass</option>
-            </select>
+         <div class="sorting-filter">
+            <div class="filter">
+               <!-- Alcohol In Hand Filter -->
+               <select id="filterAlcohol" onchange="filterImages()">
+                  <option value="">Alcohol</option>
+                  <option value="Yellow Brand Beer">Yellow Brand Beer</option>
+                  <option value="Whiskey Glass">Whiskey Glass</option>
+                  <option value="Green Beer Bottle">Green Beer Bottle</option>
+                  <option value="White Logo Beer Bottle">White Logo Beer Bottle</option>
+                  <option value="Overflowing Pint">Overflowing Pint</option>
+                  <option value="Green Beer Can">Green Beer Can</option>
+                  <option value=" Bourbon">Bourbon</option>
+                  <option value="Vodka Bottle">Vodka Bottle</option>
+                  <option value="Wine Glass">Wine Glass</option>
+               </select>
 
-            <!-- Shirts Filter -->
-            <select id="filterShirts" onchange="filterImages()">
-               <option value="">Shirts</option>
-               <option value="Black Stripped T-Shirt">Black Stripped T-Shirt</option>
-               <option value="Black T-Shirt">Black T-Shirt</option>
-               <option value="Colorful T-Shirt">Colorful T-Shirt</option>
-               <option value="Blue T-Shirt">Blue T-Shirt</option>
-               <option value="Orange T-Shirt">Orange T-Shirt</option>
-               <option value="White T-Shirt">White T-Shirt</option>
-            </select>
+               <!-- Shirts Filter -->
+               <select id="filterShirts" onchange="filterImages()">
+                  <option value="">Shirts</option>
+                  <option value="Black Stripped T-Shirt">Black Stripped T-Shirt</option>
+                  <option value="Black T-Shirt">Black T-Shirt</option>
+                  <option value="Colorful T-Shirt">Colorful T-Shirt</option>
+                  <option value="Blue T-Shirt">Blue T-Shirt</option>
+                  <option value="Orange T-Shirt">Orange T-Shirt</option>
+                  <option value="White T-Shirt">White T-Shirt</option>
+               </select>
 
-            <!-- Eye Wear Filter -->
-            <select id="filterEyeWear" onchange="filterImages()">
-               <option value="">Eye Wear</option>
-               <option value="Round Rose Glasses">Round Rose Glasses</option>
-               <option value="Black Glasses">Black Glasses</option>
-               <option value="Eyes">Eyes</option>
-               <option value="Black/White Pixel Glasses">Black/White Pixel Glasses</option>
-               <option value="Black Rim Snow Shades">Black Rim Snow Shades</option>
-               <option value="White/Red Rim Shades">White/Red Rim Shades</option>
-            </select>
+               <!-- Eye Wear Filter -->
+               <select id="filterEyeWear" onchange="filterImages()">
+                  <option value="">Eye Wear</option>
+                  <option value="Round Rose Glasses">Round Rose Glasses</option>
+                  <option value="Black Glasses">Black Glasses</option>
+                  <option value="Eyes">Eyes</option>
+                  <option value="Black/White Pixel Glasses">Black/White Pixel Glasses</option>
+                  <option value="Black Rim Snow Shades">Black Rim Snow Shades</option>
+                  <option value="White/Red Rim Shades">White/Red Rim Shades</option>
+               </select>
 
-            <!-- Hats Filter -->
-            <select id="filterHats" onchange="filterImages()">
-               <option value="">Hats</option>
-               <option value="Blue Flat Brim">Blue Flat Brim</option>
-               <option value="Blue Baseball Cap">Blue Baseball Cap</option>
-               <option value="No Hat">No Hat</option>
-               <option value="Orange Purple Hat">Orange Purple Hat</option>
-               <option value="Peaky Blinder Hat">Peaky Blinder Hat</option>
-               <option value="Red Blue Hat">Red Blue Hat</option>
-            </select>
+               <!-- Hats Filter -->
+               <select id="filterHats" onchange="filterImages()">
+                  <option value="">Hats</option>
+                  <option value="Blue Flat Brim">Blue Flat Brim</option>
+                  <option value="Blue Baseball Cap">Blue Baseball Cap</option>
+                  <option value="No Hat">No Hat</option>
+                  <option value="Orange Purple Hat">Orange Purple Hat</option>
+                  <option value="Peaky Blinder Hat">Peaky Blinder Hat</option>
+                  <option value="Red Blue Hat">Red Blue Hat</option>
+               </select>
 
-            <!-- Mouth Filter -->
-            <select id="filterMouth" onchange="filterImages()">
-               <option value="">Mouth</option>
-               <option value="Cuban Cigar">Cuban Cigar</option>
-               <option value="Pipe">Pipe</option>
-               <option value="Smoking Blunt">Smoking Blunt</option>
-               <option value="None">None</option>
-               <option value="Joint Roach">Joint Roach</option>
-               <option value="Blunt Roach">Blunt Roach</option>
-            </select>
+               <!-- Mouth Filter -->
+               <select id="filterMouth" onchange="filterImages()">
+                  <option value="">Mouth</option>
+                  <option value="Cuban Cigar">Cuban Cigar</option>
+                  <option value="Pipe">Pipe</option>
+                  <option value="Smoking Blunt">Smoking Blunt</option>
+                  <option value="None">None</option>
+                  <option value="Joint Roach">Joint Roach</option>
+                  <option value="Blunt Roach">Blunt Roach</option>
+               </select>
+            </div>
+            <div class="sorting">
+               <div class="sort-options lg">
+                  <select id="sortRarity" onchange="filterImages()">
+                     <option value="">Sort by Rarity</option>
+                     <option value="lowToHigh">Rarity Low to High</option>
+                     <option value="highToLow">Rarity High to Low</option>
+                  </select>
+               </div>
+               <div class="sort-options sm">
+                  <select id="sortRarity2" onchange="filterImages2()">
+                     <option value="">Sort by Rarity</option>
+                     <option value="lowToHigh">Rarity Low to High</option>
+                     <option value="highToLow">Rarity High to Low</option>
+                  </select>
+               </div>
+               <div class="sm-filter" onclick="openPopup()">
+                  <svg width="20" viewBox="0 0 18 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                     <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
+                     <title>filter_list</title>
+                     <desc>Created with Sketch.</desc>
+                     <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g id="Rounded" transform="translate(-443.000000, -1488.000000)">
+                           <g id="Content" transform="translate(100.000000, 1428.000000)">
+                              <g id="-Round-/-Content-/-filter_list" transform="translate(340.000000, 54.000000)">
+                                 <g transform="translate(0.000000, 0.000000)">
+                                    <polygon id="Path" points="0 0 24 0 24 24 0 24"></polygon>
+                                    <path
+                                       d="M11,18 L13,18 C13.55,18 14,17.55 14,17 C14,16.45 13.55,16 13,16 L11,16 C10.45,16 10,16.45 10,17 C10,17.55 10.45,18 11,18 Z M3,7 C3,7.55 3.45,8 4,8 L20,8 C20.55,8 21,7.55 21,7 C21,6.45 20.55,6 20,6 L4,6 C3.45,6 3,6.45 3,7 Z M7,13 L17,13 C17.55,13 18,12.55 18,12 C18,11.45 17.55,11 17,11 L7,11 C6.45,11 6,11.45 6,12 C6,12.55 6.45,13 7,13 Z"
+                                       id="🔹Icon-Color"
+                                       fill="#1D1D1D"
+                                    ></path>
+                                 </g>
+                              </g>
+                           </g>
+                        </g>
+                     </g>
+                  </svg>
+               </div>
+            </div>
          </div>
       </div>
       <div class="container">
@@ -560,7 +574,6 @@
          }
 
          function loadMore() {
-            console.log("lode morrrrr");
             var container = document.getElementById("data-container");
             var endIdx = currentChunk + chunkSize;
 
@@ -605,21 +618,27 @@
                document.getElementById("load-more-btn").style.display = "none";
             }
          }
-
+         function resetFilterValue() {
+            document.getElementById("filterAlcohol").value = "";
+            document.getElementById("filterShirts").value = "";
+            document.getElementById("filterEyeWear").value = "";
+            document.getElementById("filterHats").value = "";
+            document.getElementById("filterMouth").value = "";
+            document.getElementById("filterAlcohol2").value = "";
+            document.getElementById("filterShirts2").value = "";
+            document.getElementById("filterEyeWear2").value = "";
+            document.getElementById("filterHats2").value = "";
+            document.getElementById("filterMouth2").value = "";
+            document.getElementById("sortRarity2").value = "";
+            document.getElementById("sortRarity").value = "";
+         }
          function searchImages() {
             var searchInput = document.getElementById("searchInput");
             let searchItem = document.querySelector(".search-item");
             let searchItemText = document.querySelector(".search-item-text");
 
             var searchTerm = searchInput.value.trim().toLowerCase();
-            document.getElementById("filterAlcohol").value = "";
-            document.getElementById("filterShirts").value = "";
-            document.getElementById("filterEyeWear").value = "";
-            document.getElementById("filterHats").value = "";
-            document.getElementById("filterMouth").value = "";
-            document.getElementById("sortRarity").value = "";
-            document.getElementById("sortRarity2").value = "";
-
+            resetFilterValue();
             toggleSortRarity(false);
 
             if (searchTerm === "") {
@@ -843,6 +862,8 @@
             var smFilter = document.querySelector(".sm-filter");
             var displayStyle = enable ? "block" : "none"; // Set the display style based on the enable flag
 
+            var sorting = document.querySelector(".sorting");
+
             filterAlcohol.style.display = displayStyle;
             filterShirts.style.display = displayStyle;
             filterEyeWear.style.display = displayStyle;
@@ -855,7 +876,19 @@
             filterMouth2.style.display = displayStyle;
             sortRaritySelect.style.display = displayStyle;
             sortRarity2.style.display = displayStyle;
-            smFilter.style.display = displayStyle;
+
+            if (enable) {
+               smFilter.style.opacity = "1";
+               smFilter.style.visibility = "visible";
+            } else {
+               smFilter.style.opacity = "0";
+               smFilter.style.visibility = "hidden";
+            }
+            if (enable) {
+               sorting.style.display = "flex";
+            } else {
+               sorting.style.display = "none";
+            }
          }
 
          function openPopup() {
