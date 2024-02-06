@@ -349,6 +349,16 @@
             align-items: center;
             padding: 0 15px;
          }
+         #no-data-message {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #888;
+         }
+         #no-data-message h3 {
+            font-size: 26px;
+            font-weight: 600;
+         }
       </style>
    </head>
    <body>
@@ -552,15 +562,22 @@
             </div>
          </div>
          <div class="image-container" id="data-container"></div>
-         <div id="no-data-message" style="display: none">No data found.</div>
+         <div id="no-data-message" style="display: none">
+            <div>
+               <svg xmlns="http://www.w3.org/2000/svg" width="100" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+               </svg>
+            </div>
+            <h3>No data found.</h3>
+         </div>
 
          <button id="load-more-btn" onclick="loadMore()">Load More</button>
       </div>
 
       <script>
-         var jsonData; // Variable to store all JSON data
-         var chunkSize = 50; // Number of items to load at a time
-         var currentChunk = 0; // Current chunk index
+         let jsonData; // Variable to store all JSON data
+         const chunkSize = 50; // Number of items to load at a time
+         let currentChunk = 0; // Current chunk index
 
          function fetchData() {
             // Show loader while data is being fetched
@@ -578,27 +595,27 @@
          }
 
          function loadMore() {
-            var container = document.getElementById("data-container");
-            var endIdx = currentChunk + chunkSize;
+            const container = document.getElementById("data-container");
+            let endIdx = currentChunk + chunkSize;
 
-            for (var i = currentChunk; i < endIdx && i < jsonData.length; i++) {
-               var item = jsonData[i];
+            for (let i = currentChunk; i < endIdx && i < jsonData.length; i++) {
+               const item = jsonData[i];
 
-               var imgBox = document.createElement("div");
+               const imgBox = document.createElement("div");
                imgBox.className = "img-box loading"; // Add loading class
-               var contentDiv = document.createElement("div"); // Wrap img, h2, and p inside a div
+               const contentDiv = document.createElement("div"); // Wrap img, h2, and p inside a div
                contentDiv.className = "content";
-               var imgElement = document.createElement("img");
+               const imgElement = document.createElement("img");
                imgElement.src = `./images/${item.id}.png`; // Directly set the src without lazy loading
                imgElement.alt = ""; // Add alt attribute for accessibility
 
-               var idElement = document.createElement("h2");
+               const idElement = document.createElement("h2");
                idElement.textContent = "NUMBER: " + item.id;
 
-               var rarityElement = document.createElement("p");
+               const rarityElement = document.createElement("p");
                rarityElement.textContent = "Rarity: " + item.rarity;
 
-               var percentageElement = document.createElement("p");
+               const percentageElement = document.createElement("p");
                percentageElement.textContent = "Percentile: " + item.percentage + "%";
                imgBox.appendChild(imgElement);
                contentDiv.appendChild(idElement);
@@ -622,6 +639,7 @@
                document.getElementById("load-more-btn").style.display = "none";
             }
          }
+
          function resetFilterValue() {
             document.getElementById("filterAlcohol").value = "";
             document.getElementById("filterShirts").value = "";
@@ -636,12 +654,13 @@
             document.getElementById("sortRarity2").value = "";
             document.getElementById("sortRarity").value = "";
          }
-         function searchImages() {
-            var searchInput = document.getElementById("searchInput");
-            let searchItem = document.querySelector(".search-item");
-            let searchItemText = document.querySelector(".search-item-text");
 
-            var searchTerm = searchInput.value.trim().toLowerCase();
+         function searchImages() {
+            const searchInput = document.getElementById("searchInput");
+            const searchItem = document.querySelector(".search-item");
+            const searchItemText = document.querySelector(".search-item-text");
+
+            const searchTerm = searchInput.value.trim().toLowerCase();
             resetFilterValue();
             toggleSortRarity(false);
 
@@ -650,42 +669,43 @@
                alert("Please enter a search term");
                return;
             }
+
             console.log(searchTerm);
             searchItem.style.display = "block";
             searchItemText.textContent = searchTerm;
             // Filter data based on the exact match of the search term with the ID
-            var filteredData = jsonData.filter(function (item) {
+            const filteredData = jsonData.filter(function (item) {
                return item.id.toString().toLowerCase() === searchTerm;
             });
-            var noDataMessage = document.getElementById("no-data-message");
-            noDataMessage.style.display = filteredData.length === 0 ? "block" : "none";
+            const noDataMessage = document.getElementById("no-data-message");
+            noDataMessage.style.display = filteredData.length === 0 ? "flex" : "none";
 
             // Reset currentChunk and load the filtered data
             currentChunk = 0;
-            var container = document.getElementById("data-container");
+            const container = document.getElementById("data-container");
             container.innerHTML = ""; // Clear existing data
 
             // Load the filtered data
-            for (var i = 0; i < chunkSize && i < filteredData.length; i++) {
-               var item = filteredData[i];
+            for (let i = 0; i < chunkSize && i < filteredData.length; i++) {
+               const item = filteredData[i];
 
-               var imgBox = document.createElement("div");
+               const imgBox = document.createElement("div");
                imgBox.className = "img-box img-box-full loading";
 
-               var contentDiv = document.createElement("div"); // Wrap img, h2, and p inside a div
+               const contentDiv = document.createElement("div"); // Wrap img, h2, and p inside a div
                contentDiv.className = "content";
 
-               var imgElement = document.createElement("img");
+               const imgElement = document.createElement("img");
                imgElement.src = `./images/${item.id}.png`; // Directly set the src without lazy loading
                imgElement.alt = ""; // Add alt attribute for accessibility
 
-               var idElement = document.createElement("h2");
+               const idElement = document.createElement("h2");
                idElement.textContent = "Number: " + item.id;
 
-               var rarityElement = document.createElement("p");
+               const rarityElement = document.createElement("p");
                rarityElement.textContent = "Rarity: " + item.rarity;
 
-               var percentageElement = document.createElement("p");
+               const percentageElement = document.createElement("p");
                percentageElement.textContent = "Percentile: " + item.percentage + "%";
 
                imgBox.appendChild(imgElement);
@@ -718,7 +738,7 @@
          }
          // Additional function to handle clearing the search field
          function clearSearch() {
-            let searchItem = document.querySelector(".search-item");
+            const searchItem = document.querySelector(".search-item");
             document.getElementById("load-more-btn").style.display = "block";
 
             searchItem.style.display = "none";
@@ -726,26 +746,25 @@
 
             // Reset currentChunk and load all data
             currentChunk = 0;
-            var container = document.getElementById("data-container");
+            const container = document.getElementById("data-container");
             container.innerHTML = ""; // Clear existing data
 
             loadMore();
-
             // loadMore();
          }
 
          function filterImages() {
-            var filterAlcohol = document.getElementById("filterAlcohol").value;
-            var filterShirts = document.getElementById("filterShirts").value;
-            var filterEyeWear = document.getElementById("filterEyeWear").value;
-            var filterHats = document.getElementById("filterHats").value;
-            var filterMouth = document.getElementById("filterMouth").value;
-            var sortRarity = document.getElementById("sortRarity").value;
+            const filterAlcohol = document.getElementById("filterAlcohol").value;
+            const filterShirts = document.getElementById("filterShirts").value;
+            const filterEyeWear = document.getElementById("filterEyeWear").value;
+            const filterHats = document.getElementById("filterHats").value;
+            const filterMouth = document.getElementById("filterMouth").value;
+            const sortRarity = document.getElementById("sortRarity").value;
             console.log(filterAlcohol);
             toggleSortRarity(true);
 
             // Filter data based on the selected options
-            var filteredData = jsonData.filter(function (item) {
+            const filteredData = jsonData.filter(function (item) {
                return (
                   (filterAlcohol === "" || item.alcohol === filterAlcohol) &&
                   (filterShirts === "" || item.shirt === filterShirts) &&
@@ -758,18 +777,19 @@
             // Display filtered data
             displayFilteredData(filteredData, sortRarity);
          }
+
          function filterImages2() {
-            var filterAlcohol = document.getElementById("filterAlcohol2").value;
-            var filterShirts = document.getElementById("filterShirts2").value;
-            var filterEyeWear = document.getElementById("filterEyeWear2").value;
-            var filterHats = document.getElementById("filterHats2").value;
-            var filterMouth = document.getElementById("filterMouth2").value;
-            var sortRarity = document.getElementById("sortRarity2").value;
+            const filterAlcohol = document.getElementById("filterAlcohol2").value;
+            const filterShirts = document.getElementById("filterShirts2").value;
+            const filterEyeWear = document.getElementById("filterEyeWear2").value;
+            const filterHats = document.getElementById("filterHats2").value;
+            const filterMouth = document.getElementById("filterMouth2").value;
+            const sortRarity = document.getElementById("sortRarity2").value;
             console.log(filterAlcohol);
             toggleSortRarity(true);
 
             // Filter data based on the selected options
-            var filteredData = jsonData.filter(function (item) {
+            const filteredData = jsonData.filter(function (item) {
                return (
                   (filterAlcohol === "" || item.alcohol === filterAlcohol) &&
                   (filterShirts === "" || item.shirt === filterShirts) &&
@@ -786,11 +806,11 @@
          function displayFilteredData(filteredData, sortRarity) {
             console.log(filteredData.length);
 
-            var container = document.getElementById("data-container");
+            const container = document.getElementById("data-container");
             container.innerHTML = ""; // Clear existing data
-            var noDataMessage = document.getElementById("no-data-message");
+            const noDataMessage = document.getElementById("no-data-message");
             if (filteredData.length === 0) {
-               noDataMessage.style.display = "block";
+               noDataMessage.style.display = "flex";
                return; // No need to proceed further if there's no data to display
             } else {
                noDataMessage.style.display = "none"; // Hide the "no data found" message if there is data to display
@@ -808,39 +828,39 @@
             }
 
             // Determine the number of items to display initially
-            var chunkSize = 50;
-            var itemsToShow = Math.min(chunkSize, filteredData.length);
+            const chunkSize = 50;
+            const itemsToShow = Math.min(chunkSize, filteredData.length);
 
-            for (var i = 0; i < itemsToShow; i++) {
-               var item = filteredData[i];
-               var imgBox = createImageBox(item);
+            for (let i = 0; i < itemsToShow; i++) {
+               const item = filteredData[i];
+               const imgBox = createImageBox(item);
                container.appendChild(imgBox);
             }
 
             // Determine whether to show or hide the "Load More" button
-            var loadMoreBtn = document.getElementById("load-more-btn");
+            const loadMoreBtn = document.getElementById("load-more-btn");
             loadMoreBtn.style.display = filteredData.length > chunkSize ? "block" : "none";
             // Hide the "no data found" message if filtered data is found
          }
 
          function createImageBox(item) {
-            var imgBox = document.createElement("div");
+            const imgBox = document.createElement("div");
             imgBox.className = "img-box loading";
 
-            var contentDiv = document.createElement("div"); // Wrap img, h2, and p inside a div
+            const contentDiv = document.createElement("div"); // Wrap img, h2, and p inside a div
             contentDiv.className = "content";
 
-            var imgElement = document.createElement("img");
+            const imgElement = document.createElement("img");
             imgElement.src = `./images/${item.id}.png`; // Directly set the src without lazy loading
             imgElement.alt = ""; // Add alt attribute for accessibility
 
-            var idElement = document.createElement("h2");
+            const idElement = document.createElement("h2");
             idElement.textContent = "NUMBER: " + item.id;
 
-            var rarityElement = document.createElement("p");
+            const rarityElement = document.createElement("p");
             rarityElement.textContent = "Rarity: " + item.rarity;
 
-            var percentageElement = document.createElement("p");
+            const percentageElement = document.createElement("p");
             percentageElement.textContent = "Percentile: " + item.percentage + "%";
 
             imgBox.appendChild(imgElement);
@@ -858,21 +878,21 @@
          }
 
          function toggleSortRarity(enable) {
-            var sortRaritySelect = document.getElementById("sortRarity");
-            var filterAlcohol2 = document.getElementById("filterAlcohol2");
-            var filterShirts2 = document.getElementById("filterShirts2");
-            var filterEyeWear2 = document.getElementById("filterEyeWear2");
-            var filterHats2 = document.getElementById("filterHats2");
-            var filterMouth2 = document.getElementById("filterMouth2");
-            var filterAlcohol = document.getElementById("filterAlcohol");
-            var filterShirts = document.getElementById("filterShirts");
-            var filterEyeWear = document.getElementById("filterEyeWear");
-            var filterHats = document.getElementById("filterHats");
-            var filterMouth = document.getElementById("filterMouth");
-            var sortRarity2 = document.getElementById("sortRarity2");
-            var smFilter = document.querySelector(".sm-filter");
-            var displayStyle = enable ? "block" : "none";
-            var sorting = document.querySelector(".sorting");
+            const sortRaritySelect = document.getElementById("sortRarity");
+            const filterAlcohol2 = document.getElementById("filterAlcohol2");
+            const filterShirts2 = document.getElementById("filterShirts2");
+            const filterEyeWear2 = document.getElementById("filterEyeWear2");
+            const filterHats2 = document.getElementById("filterHats2");
+            const filterMouth2 = document.getElementById("filterMouth2");
+            const filterAlcohol = document.getElementById("filterAlcohol");
+            const filterShirts = document.getElementById("filterShirts");
+            const filterEyeWear = document.getElementById("filterEyeWear");
+            const filterHats = document.getElementById("filterHats");
+            const filterMouth = document.getElementById("filterMouth");
+            const sortRarity2 = document.getElementById("sortRarity2");
+            const smFilter = document.querySelector(".sm-filter");
+            const displayStyle = enable ? "block" : "none";
+            const sorting = document.querySelector(".sorting");
 
             filterAlcohol.style.display = displayStyle;
             filterShirts.style.display = displayStyle;
@@ -902,12 +922,12 @@
          }
 
          function openPopup() {
-            let popup = document.querySelector(".popup");
+            const popup = document.querySelector(".popup");
             popup.style.opacity = "1";
             popup.style.visibility = "visible";
          }
          function hiddenPopup() {
-            let popup = document.querySelector(".popup");
+            const popup = document.querySelector(".popup");
             popup.style.opacity = "0";
             popup.style.visibility = "hidden";
          }
