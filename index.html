@@ -679,13 +679,13 @@
                imgElement.alt = ""; // Add alt attribute for accessibility
 
                var idElement = document.createElement("h2");
-               idElement.textContent = "ID: " + item.id;
+               idElement.textContent = "Number: " + item.id;
 
                var rarityElement = document.createElement("p");
                rarityElement.textContent = "Rarity: " + item.rarity;
 
                var percentageElement = document.createElement("p");
-               percentageElement.textContent = "Percentage: " + item.percentage + "%";
+               percentageElement.textContent = "Percentile: " + item.percentage + "%";
 
                imgBox.appendChild(imgElement);
                contentDiv.appendChild(idElement);
