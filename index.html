@@ -69,7 +69,8 @@
             transition: all 0.5s ease-in-out; /* Opacity transition */
          }
 
-         #load-more-btn {
+         #load-more-btn,
+         #load-more-filtered-btn {
             margin-top: 20px;
             cursor: pointer;
             padding: 10px 15px;
@@ -562,6 +563,7 @@
             </div>
          </div>
          <div class="image-container" id="data-container"></div>
+         <div class="" id="load" style="display: none; color: #111; font-size: 200px">lodding</div>
          <div id="no-data-message" style="display: none">
             <div>
                <svg xmlns="http://www.w3.org/2000/svg" width="100" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -571,19 +573,20 @@
             <h3>No data found.</h3>
          </div>
 
-         <button id="load-more-btn" onclick="loadMore()">Load More</button>
+         <button id="load-more-btn" onclick="loadMore()" style="display: none">Load More</button>
+         <button id="load-more-filtered-btn" style="display: none" onclick="loadMoreFilterData()">Load More Filtered Data</button>
       </div>
 
       <script>
-         let jsonData; // Variable to store all JSON data
+         let jsonData;
+         let filteredData; // Variable to store all JSON data
          const chunkSize = 50; // Number of items to load at a time
          let currentChunk = 0; // Current chunk index
 
          function fetchData() {
             // Show loader while data is being fetched
-
             // Fetch data from data.json file
-            fetch("data.json")
+            fetch("https://storage.googleapis.com/tiny-images/data.json")
                .then((response) => response.json())
                .then((data) => {
                   jsonData = data;
@@ -592,52 +595,6 @@
                .catch((error) => {
                   console.error("Error fetching data:", error);
                });
-         }
-
-         function loadMore() {
-            const container = document.getElementById("data-container");
-            let endIdx = currentChunk + chunkSize;
-
-            for (let i = currentChunk; i < endIdx && i < jsonData.length; i++) {
-               const item = jsonData[i];
-
-               const imgBox = document.createElement("div");
-               imgBox.className = "img-box loading"; // Add loading class
-               const contentDiv = document.createElement("div"); // Wrap img, h2, and p inside a div
-               contentDiv.className = "content";
-               const imgElement = document.createElement("img");
-               imgElement.src = `./images/${item.id}.png`; // Directly set the src without lazy loading
-               imgElement.alt = ""; // Add alt attribute for accessibility
-
-               const idElement = document.createElement("h2");
-               idElement.textContent = "NUMBER: " + item.id;
-
-               const rarityElement = document.createElement("p");
-               rarityElement.textContent = "Rarity: " + item.rarity;
-
-               const percentageElement = document.createElement("p");
-               percentageElement.textContent = "Percentile: " + item.percentage + "%";
-               imgBox.appendChild(imgElement);
-               contentDiv.appendChild(idElement);
-               contentDiv.appendChild(rarityElement);
-               contentDiv.appendChild(percentageElement);
-
-               imgBox.appendChild(contentDiv);
-
-               container.appendChild(imgBox);
-
-               // Add an event listener to each imgElement to remove the loading class once the image is loaded
-               imgElement.addEventListener("load", function () {
-                  this.parentElement.classList.remove("loading");
-               });
-            }
-
-            currentChunk = endIdx;
-
-            // Hide the "Load More" button if all data has been loaded
-            if (currentChunk >= jsonData.length) {
-               document.getElementById("load-more-btn").style.display = "none";
-            }
          }
 
          function resetFilterValue() {
@@ -722,6 +679,8 @@
             }
 
             document.getElementById("load-more-btn").style.display = "none";
+            document.getElementById("load-more-filtered-btn").style.display = "none";
+
             searchInput.value = "";
             // Hide the "no data found" message if filtered data is found
             if (filteredData.length > 0) {
@@ -750,7 +709,6 @@
             container.innerHTML = ""; // Clear existing data
 
             loadMore();
-            // loadMore();
          }
 
          function filterImages() {
@@ -764,7 +722,7 @@
             toggleSortRarity(true);
 
             // Filter data based on the selected options
-            const filteredData = jsonData.filter(function (item) {
+            filteredData = jsonData.filter(function (item) {
                return (
                   (filterAlcohol === "" || item.alcohol === filterAlcohol) &&
                   (filterShirts === "" || item.shirt === filterShirts) &&
@@ -789,7 +747,7 @@
             toggleSortRarity(true);
 
             // Filter data based on the selected options
-            const filteredData = jsonData.filter(function (item) {
+            filteredData = jsonData.filter(function (item) {
                return (
                   (filterAlcohol === "" || item.alcohol === filterAlcohol) &&
                   (filterShirts === "" || item.shirt === filterShirts) &&
@@ -804,7 +762,7 @@
          }
 
          function displayFilteredData(filteredData, sortRarity) {
-            console.log(filteredData.length);
+            console.log(filteredData.length, "displayFilteredData");
 
             const container = document.getElementById("data-container");
             container.innerHTML = ""; // Clear existing data
@@ -839,10 +797,65 @@
 
             // Determine whether to show or hide the "Load More" button
             const loadMoreBtn = document.getElementById("load-more-btn");
-            loadMoreBtn.style.display = filteredData.length > chunkSize ? "block" : "none";
-            // Hide the "no data found" message if filtered data is found
+            if (filteredData.length > chunkSize) {
+               document.getElementById("load-more-filtered-btn").style.display = "block";
+               loadMoreBtn.style.display = "none";
+            } else {
+               document.getElementById("load-more-filtered-btn").style.display = "none";
+               // loadMoreBtn.style.display = "block";
+            }
+            if (filteredData.length === 1000) {
+               document.getElementById("load-more-filtered-btn").style.display = "none";
+
+               loadMoreBtn.style.display = "block";
+            }
          }
 
+         function loadMore() {
+            const container = document.getElementById("data-container");
+            let endIdx = currentChunk + chunkSize;
+
+            for (let i = currentChunk; i < endIdx && i < jsonData.length; i++) {
+               const item = jsonData[i];
+               const imgBox = createImageBox(item);
+               container.appendChild(imgBox);
+            }
+
+            currentChunk = endIdx;
+
+            // Hide the "Load More" button if all data has been loaded
+            if (currentChunk >= jsonData.length) {
+               document.getElementById("load-more-btn").style.display = "none";
+            }
+            if (filteredData) {
+               document.getElementById("load-more-btn").style.display = "none";
+            }
+            if (!filteredData) {
+               document.getElementById("load-more-filtered-btn").style.display = "none";
+            }
+            if (jsonData.length > 0) {
+               const noDataMessage = document.getElementById("no-data-message");
+
+               noDataMessage.style.display = "none";
+            }
+            if (jsonData.length === 1000) {
+               document.getElementById("load-more-btn").style.display = "block";
+            }
+         }
+         function loadMoreFilterData() {
+            const container = document.getElementById("data-container");
+            let endIdx = currentChunk + chunkSize;
+            for (let i = currentChunk; i < endIdx && i < filteredData.length; i++) {
+               const item = filteredData[i];
+               const imgBox = createImageBox(item);
+               container.appendChild(imgBox);
+            }
+            currentChunk = endIdx;
+            // Hide the "Load More" button if all data has been loaded
+            if (currentChunk >= filteredData.length) {
+               document.getElementById("load-more-filtered-btn").style.display = "none";
+            }
+         }
          function createImageBox(item) {
             const imgBox = document.createElement("div");
             imgBox.className = "img-box loading";
@@ -876,7 +889,6 @@
 
             return imgBox;
          }
-
          function toggleSortRarity(enable) {
             const sortRaritySelect = document.getElementById("sortRarity");
             const filterAlcohol2 = document.getElementById("filterAlcohol2");
