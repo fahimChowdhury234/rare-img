@@ -796,7 +796,7 @@
 
             // Determine whether to show or hide the "Load More" button
             const loadMoreBtn = document.getElementById("load-more-btn");
-            if (filteredData.length > chunkSize && sortRarity) {
+            if (filteredData.length > chunkSize || sortRarity) {
                document.getElementById("load-more-filtered-btn").style.display = "block";
                loadMoreBtn.style.display = "none";
             } else {
