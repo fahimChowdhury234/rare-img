@@ -618,14 +618,14 @@
             const searchItemText = document.querySelector(".search-item-text");
 
             const searchTerm = searchInput.value.trim().toLowerCase();
-            resetFilterValue();
-            toggleSortRarity(false);
 
             if (searchTerm === "") {
                // Show error message if search term is empty
                alert("Please enter a search term");
                return;
             }
+            resetFilterValue();
+            toggleSortRarity(false);
 
             console.log(searchTerm);
             searchItem.style.display = "block";
