@@ -103,7 +103,7 @@
 
             width: 100%;
             min-height: 430px;
-            background-image: url(./images/animation.gif);
+            background-image: url(https://storage.googleapis.com/tiny-images/animation.gif);
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
@@ -590,6 +590,7 @@
                .then((response) => response.json())
                .then((data) => {
                   jsonData = data;
+                  console.log(jsonData);
                   loadMore();
                })
                .catch((error) => {
@@ -653,7 +654,7 @@
                contentDiv.className = "content";
 
                const imgElement = document.createElement("img");
-               imgElement.src = `./images/${item.id}.png`; // Directly set the src without lazy loading
+               imgElement.src = `https://storage.googleapis.com/tiny-images/images/${item.id}.webp`; // Directly set the src without lazy loading
                imgElement.alt = ""; // Add alt attribute for accessibility
 
                const idElement = document.createElement("h2");
@@ -863,7 +864,7 @@
             contentDiv.className = "content";
 
             const imgElement = document.createElement("img");
-            imgElement.src = `./images/${item.id}.png`; // Directly set the src without lazy loading
+            imgElement.src = `https://storage.googleapis.com/tiny-images/images/${item.id}.webp`; // Directly set the src without lazy loading
             imgElement.alt = ""; // Add alt attribute for accessibility
 
             const idElement = document.createElement("h2");
