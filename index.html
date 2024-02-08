@@ -762,7 +762,7 @@
          }
 
          function displayFilteredData(filteredData, sortRarity) {
-            console.log(filteredData.length, "displayFilteredData");
+            console.log(filteredData.length, sortRarity, "displayFilteredData");
 
             const container = document.getElementById("data-container");
             container.innerHTML = ""; // Clear existing data
@@ -773,7 +773,6 @@
             } else {
                noDataMessage.style.display = "none"; // Hide the "no data found" message if there is data to display
             }
-
             // Sort the filtered data based on sortRarity
             if (sortRarity === "lowToHigh") {
                filteredData.sort(function (a, b) {
@@ -797,14 +796,14 @@
 
             // Determine whether to show or hide the "Load More" button
             const loadMoreBtn = document.getElementById("load-more-btn");
-            if (filteredData.length > chunkSize) {
+            if (filteredData.length > chunkSize && sortRarity) {
                document.getElementById("load-more-filtered-btn").style.display = "block";
                loadMoreBtn.style.display = "none";
             } else {
                document.getElementById("load-more-filtered-btn").style.display = "none";
                // loadMoreBtn.style.display = "block";
             }
-            if (filteredData.length === 1000) {
+            if (filteredData.length === 1000 && !sortRarity) {
                document.getElementById("load-more-filtered-btn").style.display = "none";
 
                loadMoreBtn.style.display = "block";
