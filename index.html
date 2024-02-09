@@ -729,7 +729,7 @@
                   (filterMouth === "" || item.mouth === filterMouth)
                );
             });
-
+            currentChunk = 50;
             // Display filtered data
             displayFilteredData(filteredData, sortRarity);
          }
@@ -753,7 +753,7 @@
                   (filterMouth === "" || item.mouth === filterMouth)
                );
             });
-
+            currentChunk = 50;
             // Display filtered data
             displayFilteredData(filteredData, sortRarity);
          }
@@ -762,12 +762,17 @@
             const container = document.getElementById("data-container");
             container.innerHTML = ""; // Clear existing data
             const noDataMessage = document.getElementById("no-data-message");
+
+            // Display no data message if filteredData is empty
             if (filteredData.length === 0) {
                noDataMessage.style.display = "flex";
+               document.getElementById("load-more-btn").style.display = "none"; // Hide "Load More" button
+               document.getElementById("load-more-filtered-btn").style.display = "none"; // Hide "Load More Filter Data" button
                return; // No need to proceed further if there's no data to display
             } else {
                noDataMessage.style.display = "none"; // Hide the "no data found" message if there is data to display
             }
+
             // Sort the filtered data based on sortRarity
             if (sortRarity === "lowToHigh") {
                filteredData.sort(function (a, b) {
@@ -779,30 +784,24 @@
                });
             }
 
-            // Determine the number of items to display initially
+            // Display the first chunk of filtered data
             const chunkSize = 50;
             const itemsToShow = Math.min(chunkSize, filteredData.length);
-
             for (let i = 0; i < itemsToShow; i++) {
                const item = filteredData[i];
                const imgBox = createImageBox(item);
                container.appendChild(imgBox);
             }
 
-            // Determine whether to show or hide the "Load More" button
-            const loadMoreBtn = document.getElementById("load-more-btn");
-            if (filteredData.length > chunkSize || sortRarity) {
+            // Determine whether to show or hide the "Load More Filter Data" button
+            if (filteredData.length > chunkSize) {
                document.getElementById("load-more-filtered-btn").style.display = "block";
-               loadMoreBtn.style.display = "none";
             } else {
                document.getElementById("load-more-filtered-btn").style.display = "none";
-               // loadMoreBtn.style.display = "block";
             }
-            if (filteredData.length === 1000 && !sortRarity) {
-               document.getElementById("load-more-filtered-btn").style.display = "none";
 
-               loadMoreBtn.style.display = "block";
-            }
+            // Hide "Load More" button while filtering
+            document.getElementById("load-more-btn").style.display = "none";
          }
 
          function loadMore() {
@@ -838,18 +837,27 @@
          }
          function loadMoreFilterData() {
             const container = document.getElementById("data-container");
-            let endIdx = currentChunk + chunkSize;
-            for (let i = currentChunk; i < endIdx && i < filteredData.length; i++) {
+            const loadMoreBtn = document.getElementById("load-more-filtered-btn");
+
+            // Calculate the start index for the next chunk
+            const startIdx = currentChunk;
+            const endIdx = Math.min(startIdx + chunkSize, filteredData.length);
+
+            // Display the next chunk of filtered data
+            for (let i = startIdx; i < endIdx; i++) {
                const item = filteredData[i];
                const imgBox = createImageBox(item);
                container.appendChild(imgBox);
             }
-            currentChunk = endIdx;
+
+            currentChunk = endIdx; // Update currentChunk
+
             // Hide the "Load More" button if all data has been loaded
             if (currentChunk >= filteredData.length) {
-               document.getElementById("load-more-filtered-btn").style.display = "none";
+               loadMoreBtn.style.display = "none";
             }
          }
+
          function createImageBox(item) {
             const imgBox = document.createElement("div");
             imgBox.className = "img-box loading";
